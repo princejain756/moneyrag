@@ -1,0 +1,26 @@
+[project]
+name = "moneyrag"
+version = "0.1.0"
+description = "Local RAG + tool-calling agent over synthetic personal finance data, with citation checks and evals."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Prince Jain" }]
+dependencies = [
+  "fastembed>=0.4",
+  "numpy>=1.26",
+  "openai>=1.40",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["moneyrag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
