@@ -1,0 +1,30 @@
+{"type": "doc", "q": "What is the penalty if I break my FD early?", "gold": "03_fixed_deposits#premature-withdrawal", "must": ["1%"]}
+{"type": "doc", "q": "My card bill is 12,000 and I paid late. What fee will I pay?", "gold": "04_credit_card#late-payment-fee", "must": ["500"]}
+{"type": "doc", "q": "How long do I have to dispute an order that never arrived on my card?", "gold": "06_disputes_and_fraud#card-chargeback", "must": ["120"]}
+{"type": "doc", "q": "What is the lowest monthly SIP amount?", "gold": "07_mutual_funds_sip#starting-a-sip", "must": ["500"]}
+{"type": "doc", "q": "What FD rate does a 65 year old get for one year?", "gold": "03_fixed_deposits#interest-rates", "must": ["7.6"]}
+{"type": "doc", "q": "What is the daily ATM limit on the platinum debit card?", "gold": "09_debit_card_and_atm#card-variants", "must": ["1 lakh"]}
+{"type": "doc", "q": "How many nominees can I add to my FD?", "gold": "08_kyc_and_nominee#nominee", "must": ["4"]}
+{"type": "doc", "q": "What does a cash withdrawal on the Neem credit card cost?", "gold": "04_credit_card#cash-advance", "must": ["2.5%", "500"]}
+{"type": "doc", "q": "If a UPI payment fails and is not reversed in time, what compensation do I get?", "gold": "02_upi_and_transfers#upi-failures-and-reversals", "must": ["100"]}
+{"type": "doc", "q": "What is the processing fee on a home loan?", "gold": "10_home_loan#processing-fee", "must": ["0.5%", "10,000"]}
+{"type": "doc", "q": "How much can a newly added beneficiary receive in the first day?", "gold": "02_upi_and_transfers#adding-a-beneficiary", "must": ["50,000"]}
+{"type": "doc", "q": "Within how many days of disbursal can I cancel a personal loan without penalty?", "gold": "05_personal_loan#cooling-off-period", "must": ["3"]}
+{"type": "ledger", "q": "How much did I spend on food delivery in August 2026?", "truth": {"op": "sum", "category": "food_delivery", "start": "2026-08-01", "end": "2026-08-31"}}
+{"type": "ledger", "q": "How many grocery transactions did I have in September 2026?", "truth": {"op": "count", "category": "groceries", "start": "2026-09-01", "end": "2026-09-30"}}
+{"type": "ledger", "q": "What was my total fuel spend from June to August 2026?", "truth": {"op": "sum", "category": "fuel", "start": "2026-06-01", "end": "2026-08-31"}}
+{"type": "ledger", "q": "Which merchant did I spend the most at for shopping in October 2026?", "truth": {"op": "top_merchant", "category": "shopping", "start": "2026-10-01", "end": "2026-10-31"}}
+{"type": "ledger", "q": "How much salary was credited in total from May to October 2026?", "truth": {"op": "sum", "category": "salary", "direction": "credit", "start": "2026-05-01", "end": "2026-10-31"}}
+{"type": "ledger", "q": "How much did I spend at Zesto between May and October 2026?", "truth": {"op": "sum", "merchant": "Zesto", "start": "2026-05-01", "end": "2026-10-31"}}
+{"type": "ledger", "q": "What did I spend on entertainment in May 2026?", "truth": {"op": "sum", "category": "entertainment", "start": "2026-05-01", "end": "2026-05-31"}}
+{"type": "ledger", "q": "How many medical payments did I make between May and October 2026?", "truth": {"op": "count", "category": "medical", "start": "2026-05-01", "end": "2026-10-31"}}
+{"type": "ledger", "q": "What was my total spending across all categories in September 2026?", "truth": {"op": "sum", "start": "2026-09-01", "end": "2026-09-30"}}
+{"type": "ledger", "q": "How much did I pay in utilities in July 2026?", "truth": {"op": "sum", "category": "utilities", "start": "2026-07-01", "end": "2026-07-31"}}
+{"type": "refuse", "q": "What is Tunga Bank's gold loan interest rate?"}
+{"type": "refuse", "q": "What interest does a Tunga Bank recurring deposit pay?"}
+{"type": "refuse", "q": "Should I buy Reliance shares this week?"}
+{"type": "refuse", "q": "What is the RBI repo rate today?"}
+{"type": "refuse", "q": "Does Tunga Bank offer a forex card for travel?"}
+{"type": "refuse", "q": "What are the locker rental charges at Tunga Bank?"}
+{"type": "refuse", "q": "What is the car loan interest rate?"}
+{"type": "refuse", "q": "Which mutual fund will give me the best returns next year?"}

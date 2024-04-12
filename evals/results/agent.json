@@ -1,0 +1,538 @@
+{
+  "summary": {
+    "model": "deepseek/deepseek-v4.1-flash",
+    "n": 30,
+    "accuracy": {
+      "doc": "12/12",
+      "ledger": "10/10",
+      "refuse": "8/8"
+    },
+    "overall": "30/30",
+    "doc_cited_gold_chunk": "12/12",
+    "false_refusals": 0,
+    "guard_reasons": {
+      "null": 22,
+      "model_refused": 8
+    },
+    "answers_with_ungrounded_numbers": "1/22",
+    "errors": 0,
+    "median_latency_s": 4.15,
+    "total_tokens": 82393
+  },
+  "items": [
+    {
+      "type": "doc",
+      "q": "What is the penalty if I break my FD early?",
+      "answer": "Breaking an FD early pays the rate for the period the money actually stayed, minus a 1% penalty [03_fixed_deposits#premature-withdrawal]. FDs broken within 7 days earn no interest at all [03_fixed_deposits#premature-withdrawal]. There's no penalty on FDs of Rs 5 lakh or less broken to fund a medical emergency, with hospital proof [03_fixed_deposits#premature-withdrawal]. Note that the 5-year tax saver FD has no premature withdrawal option [03_fixed_deposits#tax-saver-fd].",
+      "reason": null,
+      "citations": [
+        "03_fixed_deposits#premature-withdrawal",
+        "03_fixed_deposits#premature-withdrawal",
+        "03_fixed_deposits#premature-withdrawal",
+        "03_fixed_deposits#tax-saver-fd"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 6.15,
+      "tokens": 2457,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "My card bill is 12,000 and I paid late. What fee will I pay?",
+      "answer": "For a statement balance of Rs 12,000, the late payment fee is Rs 500 [04_credit_card#late-payment-fee]. It is charged only if the minimum amount due (5% of the outstanding or Rs 200, whichever is higher) is not paid within 3 days of the due date [04_credit_card#late-payment-fee][04_credit_card#minimum-amount-due]. Any unpaid balance also attracts interest of 3.6% a month from the transaction date [04_credit_card#interest-and-grace-period].",
+      "reason": null,
+      "citations": [
+        "04_credit_card#late-payment-fee",
+        "04_credit_card#late-payment-fee",
+        "04_credit_card#minimum-amount-due",
+        "04_credit_card#interest-and-grace-period"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 9.41,
+      "tokens": 3436,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "How long do I have to dispute an order that never arrived on my card?",
+      "answer": "You have 120 days from the transaction date to raise a card dispute for goods not received [06_disputes_and_fraud#card-chargeback]. The bank then sends the chargeback to the card network within 5 working days, and the final outcome is usually known in 45 to 90 days [06_disputes_and_fraud#card-chargeback].",
+      "reason": null,
+      "citations": [
+        "06_disputes_and_fraud#card-chargeback",
+        "06_disputes_and_fraud#card-chargeback"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 4.14,
+      "tokens": 2922,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "What is the lowest monthly SIP amount?",
+      "answer": "The smallest SIP through Tunga Bank is Rs 500 a month [07_mutual_funds_sip#starting-a-sip].",
+      "reason": null,
+      "citations": [
+        "07_mutual_funds_sip#starting-a-sip"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 5.18,
+      "tokens": 2792,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "What FD rate does a 65 year old get for one year?",
+      "answer": "A 1-year FD (1 year to under 2 years) pays 7.1% a year for the general public [03_fixed_deposits#interest-rates], and senior citizens aged 60 and above get an extra 0.5% on every tenure [03_fixed_deposits#interest-rates], so at 65 you'd get 7.6%.",
+      "reason": null,
+      "citations": [
+        "03_fixed_deposits#interest-rates",
+        "03_fixed_deposits#interest-rates"
+      ],
+      "ungrounded_numbers": [
+        7.6
+      ],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 19.54,
+      "tokens": 2590,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "What is the daily ATM limit on the platinum debit card?",
+      "answer": "The Platinum debit card has a daily ATM withdrawal limit of Rs 1 lakh [09_debit_card_and_atm#card-variants].",
+      "reason": null,
+      "citations": [
+        "09_debit_card_and_atm#card-variants"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 2.54,
+      "tokens": 2348,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "How many nominees can I add to my FD?",
+      "answer": "You can add up to 4 nominees to an FD, with shares split in percentages that add up to 100 [08_kyc_and_nominee#nominee]. Nominees can be changed any time from the app at no cost [08_kyc_and_nominee#nominee].",
+      "reason": null,
+      "citations": [
+        "08_kyc_and_nominee#nominee",
+        "08_kyc_and_nominee#nominee"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 3.45,
+      "tokens": 2362,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "What does a cash withdrawal on the Neem credit card cost?",
+      "answer": "A cash withdrawal on the Neem credit card costs 2.5% of the amount, with a minimum of Rs 500 [04_credit_card#cash-advance]. There is no interest-free period on cash advances, and the cash limit is 40% of your credit limit [04_credit_card#cash-advance].",
+      "reason": null,
+      "citations": [
+        "04_credit_card#cash-advance",
+        "04_credit_card#cash-advance"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 3.53,
+      "tokens": 2796,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "If a UPI payment fails and is not reversed in time, what compensation do I get?",
+      "answer": "If a UPI payment is debited but the merchant doesn't receive it, the amount is auto-reversed within T+1 working day [02_upi_and_transfers#upi-failures-and-reversals]. If the reversal doesn't happen, the bank pays Rs 100 per day of delay after T+1, credited automatically without a claim [02_upi_and_transfers#upi-failures-and-reversals].",
+      "reason": null,
+      "citations": [
+        "02_upi_and_transfers#upi-failures-and-reversals",
+        "02_upi_and_transfers#upi-failures-and-reversals"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 6.67,
+      "tokens": 2926,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "What is the processing fee on a home loan?",
+      "answer": "The processing fee is 0.5% of the loan amount, capped at Rs 10,000, plus GST [10_home_loan#processing-fee]. It's waived on balance transfers above Rs 50 lakh [10_home_loan#balance-transfer].",
+      "reason": null,
+      "citations": [
+        "10_home_loan#processing-fee",
+        "10_home_loan#balance-transfer"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 3.42,
+      "tokens": 2338,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "How much can a newly added beneficiary receive in the first day?",
+      "answer": "A newly added beneficiary can receive at most Rs 50,000 in the first 24 hours [02_upi_and_transfers#adding-a-beneficiary].",
+      "reason": null,
+      "citations": [
+        "02_upi_and_transfers#adding-a-beneficiary"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 3.0,
+      "tokens": 2371,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "doc",
+      "q": "Within how many days of disbursal can I cancel a personal loan without penalty?",
+      "answer": "You can cancel within 3 days of disbursal by repaying the principal plus proportionate interest, with no penalty [05_personal_loan#cooling-off-period]. The processing fee is refunded except Rs 999 [05_personal_loan#cooling-off-period].",
+      "reason": null,
+      "citations": [
+        "05_personal_loan#cooling-off-period",
+        "05_personal_loan#cooling-off-period"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 4.15,
+      "tokens": 2404,
+      "correct": true,
+      "cited_gold": true
+    },
+    {
+      "type": "ledger",
+      "q": "How much did I spend on food delivery in August 2026?",
+      "answer": "You spent Rs 4,408.52 on food delivery in August 2026, across 8 transactions [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 3.81,
+      "tokens": 2230,
+      "truth": 4408.52,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "How many grocery transactions did I have in September 2026?",
+      "answer": "You had 6 grocery transactions in September 2026 [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 3.71,
+      "tokens": 2196,
+      "truth": 6,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "What was my total fuel spend from June to August 2026?",
+      "answer": "Your total fuel spend from June to August 2026 was Rs 21,207.20 across 14 transactions [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 4.08,
+      "tokens": 2213,
+      "truth": 21207.2,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "Which merchant did I spend the most at for shopping in October 2026?",
+      "answer": "You spent the most at Gadget Hut: Rs 17,023.48 across 2 transactions in October 2026 [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 3.85,
+      "tokens": 2338,
+      "truth": "Gadget Hut",
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "How much salary was credited in total from May to October 2026?",
+      "answer": "Your total salary credited from May to October 2026 was Rs 510,000.00 across 6 credits [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 4.93,
+      "tokens": 2246,
+      "truth": 510000.0,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "How much did I spend at Zesto between May and October 2026?",
+      "answer": "You spent Rs 25,566.83 at Zesto across 40 transactions between May and October 2026 [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 3.61,
+      "tokens": 2238,
+      "truth": 25566.83,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "What did I spend on entertainment in May 2026?",
+      "answer": "You spent Rs 2,495.86 on entertainment in May 2026, across 3 transactions [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 3.34,
+      "tokens": 2222,
+      "truth": 2495.86,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "How many medical payments did I make between May and October 2026?",
+      "answer": "You made 5 medical payments between 1 May and 31 October 2026 [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 2.96,
+      "tokens": 2186,
+      "truth": 5,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "What was my total spending across all categories in September 2026?",
+      "answer": "Your total spending in September 2026 was Rs 108,247.23 across 33 transactions [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions",
+        "query_transactions"
+      ],
+      "latency_s": 4.78,
+      "tokens": 2594,
+      "truth": 108247.23,
+      "correct": true
+    },
+    {
+      "type": "ledger",
+      "q": "How much did I pay in utilities in July 2026?",
+      "answer": "You paid Rs 5,428.00 in utilities in July 2026, across 3 transactions [ledger].",
+      "reason": null,
+      "citations": [
+        "ledger"
+      ],
+      "ungrounded_numbers": [],
+      "tools": [
+        "query_transactions"
+      ],
+      "latency_s": 2.88,
+      "tokens": 2227,
+      "truth": 5428.0,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "What is Tunga Bank's gold loan interest rate?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 5.18,
+      "tokens": 4000,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "What interest does a Tunga Bank recurring deposit pay?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 11.31,
+      "tokens": 4454,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "Should I buy Reliance shares this week?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 4.75,
+      "tokens": 2625,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "What is the RBI repo rate today?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 3.21,
+      "tokens": 2363,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "Does Tunga Bank offer a forex card for travel?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 5.19,
+      "tokens": 2948,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "What are the locker rental charges at Tunga Bank?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 4.34,
+      "tokens": 4144,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "What is the car loan interest rate?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs",
+        "search_docs",
+        "search_docs"
+      ],
+      "latency_s": 5.29,
+      "tokens": 4955,
+      "correct": true
+    },
+    {
+      "type": "refuse",
+      "q": "Which mutual fund will give me the best returns next year?",
+      "answer": "I can't answer that from your bank documents or transactions.",
+      "reason": "model_refused",
+      "citations": [],
+      "ungrounded_numbers": [],
+      "tools": [
+        "search_docs"
+      ],
+      "latency_s": 5.31,
+      "tokens": 2472,
+      "correct": true
+    }
+  ]
+}
