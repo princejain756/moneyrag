@@ -1,0 +1,296 @@
+{
+  "bm25": {
+    "recall@1": 0.661,
+    "recall@3": 0.797,
+    "recall@4": 0.864,
+    "recall@5": 0.881,
+    "mrr": 0.751,
+    "n": 59,
+    "misses_at_1": [
+      {
+        "q": "I opened an account last month and want to shut it. Will I be charged?",
+        "gold": "01_savings_account#account-closure",
+        "rank": 7,
+        "top1": "04_credit_card#interest-and-grace-period"
+      },
+      {
+        "q": "My account has not been used in two years, what happens to it?",
+        "gold": "01_savings_account#dormant-accounts",
+        "rank": 12,
+        "top1": "08_kyc_and_nominee#periodic-kyc-update"
+      },
+      {
+        "q": "What does an instant transfer of 50,000 cost?",
+        "gold": "02_upi_and_transfers#imps",
+        "rank": 14,
+        "top1": "10_home_loan#balance-transfer"
+      },
+      {
+        "q": "What is the minimum amount for an RTGS transfer?",
+        "gold": "02_upi_and_transfers#rtgs",
+        "rank": 3,
+        "top1": "04_credit_card#minimum-amount-due"
+      },
+      {
+        "q": "What rate does a one year deposit earn for someone who is 65?",
+        "gold": "03_fixed_deposits#interest-rates",
+        "rank": 9,
+        "top1": "10_home_loan#interest-rate"
+      },
+      {
+        "q": "What happens when my FD matures and I do nothing?",
+        "gold": "03_fixed_deposits#auto-renewal",
+        "rank": 4,
+        "top1": "03_fixed_deposits#loan-against-fd"
+      },
+      {
+        "q": "Is there an extra charge when I pay in dollars with my credit card?",
+        "gold": "04_credit_card#foreign-currency-markup",
+        "rank": 8,
+        "top1": "09_debit_card_and_atm#contactless-payments"
+      },
+      {
+        "q": "What minimum salary do I need for a personal loan?",
+        "gold": "05_personal_loan#eligibility",
+        "rank": 2,
+        "top1": "05_personal_loan#interest-rate-and-fees"
+      },
+      {
+        "q": "What is the processing charge on a personal loan?",
+        "gold": "05_personal_loan#interest-rate-and-fees",
+        "rank": 2,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "What is the longest repayment period for a personal loan?",
+        "gold": "05_personal_loan#tenure-and-amount",
+        "rank": 4,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "Can I close my personal loan early, and what does it cost?",
+        "gold": "05_personal_loan#prepayment-and-foreclosure",
+        "rank": 8,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "I changed my mind two days after the loan was disbursed. Can I cancel it?",
+        "gold": "05_personal_loan#cooling-off-period",
+        "rank": 5,
+        "top1": "05_personal_loan#eligibility"
+      },
+      {
+        "q": "Someone used my card without permission. How much will I lose if I report it the next day?",
+        "gold": "06_disputes_and_fraud#reporting-unauthorised-transactions",
+        "rank": 10,
+        "top1": "09_debit_card_and_atm#insurance-cover"
+      },
+      {
+        "q": "How long do I have to dispute an order that never arrived?",
+        "gold": "06_disputes_and_fraud#card-chargeback",
+        "rank": 2,
+        "top1": "01_savings_account#penalty-for-low-balance"
+      },
+      {
+        "q": "What is the lowest monthly SIP amount?",
+        "gold": "07_mutual_funds_sip#starting-a-sip",
+        "rank": 3,
+        "top1": "07_mutual_funds_sip#missed-sip-instalments"
+      },
+      {
+        "q": "What if my SIP fails because of low balance?",
+        "gold": "07_mutual_funds_sip#missed-sip-instalments",
+        "rank": 2,
+        "top1": "01_savings_account#penalty-for-low-balance"
+      },
+      {
+        "q": "How often do I need to redo my KYC?",
+        "gold": "08_kyc_and_nominee#periodic-kyc-update",
+        "rank": 3,
+        "top1": "08_kyc_and_nominee#deceased-claimant-process"
+      },
+      {
+        "q": "What is the max number of people on a joint account?",
+        "gold": "08_kyc_and_nominee#joint-accounts",
+        "rank": 4,
+        "top1": "08_kyc_and_nominee#kyc-documents"
+      },
+      {
+        "q": "How much of the house price will the bank finance for a 50 lakh loan?",
+        "gold": "10_home_loan#loan-to-value",
+        "rank": 3,
+        "top1": "05_personal_loan#tenure-and-amount"
+      },
+      {
+        "q": "What does it cost to process a home loan?",
+        "gold": "10_home_loan#processing-fee",
+        "rank": 4,
+        "top1": "10_home_loan#balance-transfer"
+      }
+    ]
+  },
+  "vector": {
+    "recall@1": 0.864,
+    "recall@3": 0.966,
+    "recall@4": 0.966,
+    "recall@5": 0.966,
+    "mrr": 0.917,
+    "n": 59,
+    "misses_at_1": [
+      {
+        "q": "What does an instant transfer of 50,000 cost?",
+        "gold": "02_upi_and_transfers#imps",
+        "rank": 13,
+        "top1": "10_home_loan#balance-transfer"
+      },
+      {
+        "q": "Why can I only send 50k to someone I just added?",
+        "gold": "02_upi_and_transfers#adding-a-beneficiary",
+        "rank": 2,
+        "top1": "02_upi_and_transfers#upi-limits"
+      },
+      {
+        "q": "What happens when my FD matures and I do nothing?",
+        "gold": "03_fixed_deposits#auto-renewal",
+        "rank": 3,
+        "top1": "03_fixed_deposits#premature-withdrawal"
+      },
+      {
+        "q": "Is there an extra charge when I pay in dollars with my credit card?",
+        "gold": "04_credit_card#foreign-currency-markup",
+        "rank": 6,
+        "top1": "04_credit_card#late-payment-fee"
+      },
+      {
+        "q": "What is the processing charge on a personal loan?",
+        "gold": "05_personal_loan#interest-rate-and-fees",
+        "rank": 2,
+        "top1": "10_home_loan#processing-fee"
+      },
+      {
+        "q": "What is the longest repayment period for a personal loan?",
+        "gold": "05_personal_loan#tenure-and-amount",
+        "rank": 2,
+        "top1": "10_home_loan#tenure"
+      },
+      {
+        "q": "Can I close my personal loan early, and what does it cost?",
+        "gold": "05_personal_loan#prepayment-and-foreclosure",
+        "rank": 2,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "What if my SIP fails because of low balance?",
+        "gold": "07_mutual_funds_sip#missed-sip-instalments",
+        "rank": 2,
+        "top1": "07_mutual_funds_sip#pausing-and-stopping"
+      }
+    ]
+  },
+  "hybrid": {
+    "recall@1": 0.729,
+    "recall@3": 0.966,
+    "recall@4": 0.983,
+    "recall@5": 0.983,
+    "mrr": 0.843,
+    "n": 59,
+    "misses_at_1": [
+      {
+        "q": "I opened an account last month and want to shut it. Will I be charged?",
+        "gold": "01_savings_account#account-closure",
+        "rank": 2,
+        "top1": "01_savings_account#penalty-for-low-balance"
+      },
+      {
+        "q": "My account has not been used in two years, what happens to it?",
+        "gold": "01_savings_account#dormant-accounts",
+        "rank": 2,
+        "top1": "08_kyc_and_nominee#periodic-kyc-update"
+      },
+      {
+        "q": "What does an instant transfer of 50,000 cost?",
+        "gold": "02_upi_and_transfers#imps",
+        "rank": 8,
+        "top1": "10_home_loan#balance-transfer"
+      },
+      {
+        "q": "What rate does a one year deposit earn for someone who is 65?",
+        "gold": "03_fixed_deposits#interest-rates",
+        "rank": 3,
+        "top1": "03_fixed_deposits#minimum-deposit"
+      },
+      {
+        "q": "What happens when my FD matures and I do nothing?",
+        "gold": "03_fixed_deposits#auto-renewal",
+        "rank": 4,
+        "top1": "03_fixed_deposits#tax-saver-fd"
+      },
+      {
+        "q": "Is there an extra charge when I pay in dollars with my credit card?",
+        "gold": "04_credit_card#foreign-currency-markup",
+        "rank": 3,
+        "top1": "06_disputes_and_fraud#blocking-a-card"
+      },
+      {
+        "q": "What minimum salary do I need for a personal loan?",
+        "gold": "05_personal_loan#eligibility",
+        "rank": 2,
+        "top1": "05_personal_loan#interest-rate-and-fees"
+      },
+      {
+        "q": "What is the longest repayment period for a personal loan?",
+        "gold": "05_personal_loan#tenure-and-amount",
+        "rank": 2,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "Can I close my personal loan early, and what does it cost?",
+        "gold": "05_personal_loan#prepayment-and-foreclosure",
+        "rank": 3,
+        "top1": "05_personal_loan#cooling-off-period"
+      },
+      {
+        "q": "I changed my mind two days after the loan was disbursed. Can I cancel it?",
+        "gold": "05_personal_loan#cooling-off-period",
+        "rank": 2,
+        "top1": "05_personal_loan#missed-emi"
+      },
+      {
+        "q": "Someone used my card without permission. How much will I lose if I report it the next day?",
+        "gold": "06_disputes_and_fraud#reporting-unauthorised-transactions",
+        "rank": 2,
+        "top1": "09_debit_card_and_atm#insurance-cover"
+      },
+      {
+        "q": "What if my SIP fails because of low balance?",
+        "gold": "07_mutual_funds_sip#missed-sip-instalments",
+        "rank": 3,
+        "top1": "01_savings_account#penalty-for-low-balance"
+      },
+      {
+        "q": "How often do I need to redo my KYC?",
+        "gold": "08_kyc_and_nominee#periodic-kyc-update",
+        "rank": 2,
+        "top1": "08_kyc_and_nominee#deceased-claimant-process"
+      },
+      {
+        "q": "What is the max number of people on a joint account?",
+        "gold": "08_kyc_and_nominee#joint-accounts",
+        "rank": 2,
+        "top1": "08_kyc_and_nominee#nominee"
+      },
+      {
+        "q": "How much of the house price will the bank finance for a 50 lakh loan?",
+        "gold": "10_home_loan#loan-to-value",
+        "rank": 2,
+        "top1": "05_personal_loan#tenure-and-amount"
+      },
+      {
+        "q": "What does it cost to process a home loan?",
+        "gold": "10_home_loan#processing-fee",
+        "rank": 2,
+        "top1": "10_home_loan#balance-transfer"
+      }
+    ]
+  }
+}

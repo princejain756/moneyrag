@@ -1,0 +1,59 @@
+{"q": "How much do I need to keep in my account every month if my branch is in a big city?", "gold": "01_savings_account#minimum-balance"}
+{"q": "What happens if my average balance drops below the requirement?", "gold": "01_savings_account#penalty-for-low-balance"}
+{"q": "When does the bank pay interest on my savings?", "gold": "01_savings_account#interest-on-savings"}
+{"q": "How many times can I take cash from another bank's machine without paying?", "gold": "01_savings_account#free-transactions"}
+{"q": "I opened an account last month and want to shut it. Will I be charged?", "gold": "01_savings_account#account-closure"}
+{"q": "My account has not been used in two years, what happens to it?", "gold": "01_savings_account#dormant-accounts"}
+{"q": "What is the most I can send over UPI in a day?", "gold": "02_upi_and_transfers#upi-limits"}
+{"q": "Money left my account on UPI but the shop never got it. When do I get it back?", "gold": "02_upi_and_transfers#upi-failures-and-reversals"}
+{"q": "What does an instant transfer of 50,000 cost?", "gold": "02_upi_and_transfers#imps"}
+{"q": "Is there a fee for NEFT done at the branch counter?", "gold": "02_upi_and_transfers#neft"}
+{"q": "What is the minimum amount for an RTGS transfer?", "gold": "02_upi_and_transfers#rtgs"}
+{"q": "Why can I only send 50k to someone I just added?", "gold": "02_upi_and_transfers#adding-a-beneficiary"}
+{"q": "What rate does a one year deposit earn for someone who is 65?", "gold": "03_fixed_deposits#interest-rates"}
+{"q": "Smallest amount needed to open a fixed deposit?", "gold": "03_fixed_deposits#minimum-deposit"}
+{"q": "What is the penalty if I break my FD early?", "gold": "03_fixed_deposits#premature-withdrawal"}
+{"q": "Can I withdraw my tax saving deposit before five years?", "gold": "03_fixed_deposits#tax-saver-fd"}
+{"q": "What happens when my FD matures and I do nothing?", "gold": "03_fixed_deposits#auto-renewal"}
+{"q": "How much can I borrow against my deposit?", "gold": "03_fixed_deposits#loan-against-fd"}
+{"q": "How do I avoid paying the yearly fee on the Neem card?", "gold": "04_credit_card#annual-fee"}
+{"q": "What interest is charged if I carry a balance on my credit card?", "gold": "04_credit_card#interest-and-grace-period"}
+{"q": "How is the minimum due on my card bill calculated?", "gold": "04_credit_card#minimum-amount-due"}
+{"q": "My card bill is 12,000 and I paid late. What fee will I pay?", "gold": "04_credit_card#late-payment-fee"}
+{"q": "What are the fees for withdrawing cash using a credit card?", "gold": "04_credit_card#cash-advance"}
+{"q": "Is there an extra charge when I pay in dollars with my credit card?", "gold": "04_credit_card#foreign-currency-markup"}
+{"q": "How much is one reward point worth?", "gold": "04_credit_card#rewards"}
+{"q": "What minimum salary do I need for a personal loan?", "gold": "05_personal_loan#eligibility"}
+{"q": "What is the processing charge on a personal loan?", "gold": "05_personal_loan#interest-rate-and-fees"}
+{"q": "What is the longest repayment period for a personal loan?", "gold": "05_personal_loan#tenure-and-amount"}
+{"q": "Can I close my personal loan early, and what does it cost?", "gold": "05_personal_loan#prepayment-and-foreclosure"}
+{"q": "What happens if my loan EMI bounces?", "gold": "05_personal_loan#missed-emi"}
+{"q": "I changed my mind two days after the loan was disbursed. Can I cancel it?", "gold": "05_personal_loan#cooling-off-period"}
+{"q": "Someone used my card without permission. How much will I lose if I report it the next day?", "gold": "06_disputes_and_fraud#reporting-unauthorised-transactions"}
+{"q": "Will I get my money back while the fraud is being investigated?", "gold": "06_disputes_and_fraud#shadow-credit"}
+{"q": "How long do I have to dispute an order that never arrived?", "gold": "06_disputes_and_fraud#card-chargeback"}
+{"q": "How do I block my lost card?", "gold": "06_disputes_and_fraud#blocking-a-card"}
+{"q": "My complaint has not been resolved in a month. Where do I go next?", "gold": "06_disputes_and_fraud#complaints-and-ombudsman"}
+{"q": "What is the lowest monthly SIP amount?", "gold": "07_mutual_funds_sip#starting-a-sip"}
+{"q": "What if my SIP fails because of low balance?", "gold": "07_mutual_funds_sip#missed-sip-instalments"}
+{"q": "Can I take a break from my SIP for a few months?", "gold": "07_mutual_funds_sip#pausing-and-stopping"}
+{"q": "Is there a charge for selling fund units within a year?", "gold": "07_mutual_funds_sip#exit-load-on-equity-funds"}
+{"q": "How soon does money from selling an equity fund arrive?", "gold": "07_mutual_funds_sip#redemption-timeline"}
+{"q": "Does the bank earn a commission on mutual funds?", "gold": "07_mutual_funds_sip#distributor-commission"}
+{"q": "Which documents can I use as address proof?", "gold": "08_kyc_and_nominee#kyc-documents"}
+{"q": "How often do I need to redo my KYC?", "gold": "08_kyc_and_nominee#periodic-kyc-update"}
+{"q": "What hours is video KYC available?", "gold": "08_kyc_and_nominee#video-kyc"}
+{"q": "How many nominees can I add to my FD?", "gold": "08_kyc_and_nominee#nominee"}
+{"q": "What is the max number of people on a joint account?", "gold": "08_kyc_and_nominee#joint-accounts"}
+{"q": "My father passed away and I am the nominee. How long until I get the money?", "gold": "08_kyc_and_nominee#deceased-claimant-process"}
+{"q": "What is the daily ATM limit on the platinum debit card?", "gold": "09_debit_card_and_atm#card-variants"}
+{"q": "Do I need a PIN when tapping my card for 3,000?", "gold": "09_debit_card_and_atm#contactless-payments"}
+{"q": "How do I use my debit card abroad?", "gold": "09_debit_card_and_atm#international-usage"}
+{"q": "The ATM did not give cash but my account was debited.", "gold": "09_debit_card_and_atm#failed-atm-withdrawal"}
+{"q": "Does my debit card include accident insurance?", "gold": "09_debit_card_and_atm#insurance-cover"}
+{"q": "How much of the house price will the bank finance for a 50 lakh loan?", "gold": "10_home_loan#loan-to-value"}
+{"q": "What are the current home loan rates?", "gold": "10_home_loan#interest-rate"}
+{"q": "What is the maximum home loan tenure?", "gold": "10_home_loan#tenure"}
+{"q": "What does it cost to process a home loan?", "gold": "10_home_loan#processing-fee"}
+{"q": "Can I prepay my home loan without charges?", "gold": "10_home_loan#prepayment"}
+{"q": "I want to move my home loan from another bank. What do I need?", "gold": "10_home_loan#balance-transfer"}
