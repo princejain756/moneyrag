@@ -38,3 +38,18 @@ def retriever(docs_dir):
     from moneyrag.chunk import load_corpus
     from moneyrag.retrieve import Retriever
     return Retriever(load_corpus(docs_dir), embedder=HashEmbedder())
+
+
+@pytest.fixture
+def state(tmp_path, retriever):
+    """What the HTTP service needs: retriever, ledger and memory over temp files."""
+    import sqlite3
+
+    from moneyrag.ledger import build_db
+    from moneyrag.memory import Memory
+
+    return {
+        "retriever": retriever,
+        "ledger": build_db(tmp_path / "ledger.db", check_same_thread=False),
+        "memory": Memory(sqlite3.connect(":memory:", check_same_thread=False)),
+    }

@@ -116,7 +116,45 @@ class Agent:
         state["sources"].append(text)
         return text
 
-    def ask(self, question: str) -> Result:
+    def _call_model(self, messages: list[dict], stream: bool):
+        """One model call. Yields token events, then a single `_final` event."""
+        kwargs = {"model": self.model, "messages": messages, "tools": TOOLS, "temperature": 0}
+        if not stream:
+            resp = self.client.chat.completions.create(**kwargs)
+            msg = resp.choices[0].message
+            usage = (resp.usage.prompt_tokens or 0, resp.usage.completion_tokens or 0) if resp.usage else (0, 0)
+            calls = [{"id": tc.id, "name": tc.function.name, "arguments": tc.function.arguments}
+                     for tc in (msg.tool_calls or [])]
+            yield {"type": "_final", "content": msg.content or "", "calls": calls, "usage": usage}
+            return
+
+        parts: list[str] = []
+        acc: dict[int, dict] = {}
+        for chunk in self.client.chat.completions.create(**kwargs, stream=True):
+            if not chunk.choices:
+                continue
+            delta = chunk.choices[0].delta
+            text = getattr(delta, "content", None)
+            if text:
+                parts.append(text)
+                yield {"type": "token", "text": text}
+            for tc in getattr(delta, "tool_calls", None) or []:
+                slot = acc.setdefault(tc.index, {"id": "", "name": "", "arguments": ""})
+                if getattr(tc, "id", None):
+                    slot["id"] = tc.id
+                fn = getattr(tc, "function", None)
+                if fn is not None:
+                    if getattr(fn, "name", None):
+                        slot["name"] += fn.name
+                    if getattr(fn, "arguments", None):
+                        slot["arguments"] += fn.arguments
+        calls = [acc[i] for i in sorted(acc)]
+        for n, c in enumerate(calls):
+            c["id"] = c["id"] or f"call_{n}"
+        yield {"type": "_final", "content": "".join(parts), "calls": calls, "usage": (0, 0)}
+
+    def _loop(self, question: str, stream: bool = False):
+        """Run the tool loop. Yields progress events; the last event is `done`."""
         t0 = time.time()
         sysmsg = SYSTEM.format(refusal=guard.REFUSAL, today=self.today, memory=self.memory.as_prompt())
         messages = [{"role": "system", "content": sysmsg}, {"role": "user", "content": question}]
@@ -124,31 +162,54 @@ class Agent:
         ptok = ctok = 0
         raw, steps = "", 0
         for steps in range(1, MAX_STEPS + 1):
-            resp = self.client.chat.completions.create(model=self.model, messages=messages, tools=TOOLS, temperature=0)
-            if resp.usage:
-                ptok += resp.usage.prompt_tokens or 0
-                ctok += resp.usage.completion_tokens or 0
-            msg = resp.choices[0].message
-            if not msg.tool_calls:
-                raw = msg.content or ""
+            yield {"type": "step", "n": steps}
+            final = None
+            for ev in self._call_model(messages, stream):
+                if ev["type"] == "_final":
+                    final = ev
+                else:
+                    yield ev
+            ptok += final["usage"][0]
+            ctok += final["usage"][1]
+            if not final["calls"]:
+                raw = final["content"]
                 break
-            messages.append({"role": "assistant", "content": msg.content or "",
-                             "tool_calls": [tc.model_dump() for tc in msg.tool_calls]})
-            for tc in msg.tool_calls:
+            messages.append({"role": "assistant", "content": final["content"], "tool_calls": [
+                {"id": c["id"], "type": "function",
+                 "function": {"name": c["name"], "arguments": c["arguments"]}} for c in final["calls"]]})
+            for c in final["calls"]:
                 try:
-                    args = json.loads(tc.function.arguments or "{}")
+                    args = json.loads(c["arguments"] or "{}")
                 except json.JSONDecodeError:
                     args = {}
-                state["calls"].append({"name": tc.function.name, "args": args})
-                messages.append({"role": "tool", "tool_call_id": tc.id,
-                                 "content": self._run_tool(tc.function.name, args, state)})
+                state["calls"].append({"name": c["name"], "args": args})
+                yield {"type": "tool_call", "name": c["name"], "args": args}
+                out = self._run_tool(c["name"], args, state)
+                messages.append({"role": "tool", "tool_call_id": c["id"], "content": out})
+                yield {"type": "tool_result", "name": c["name"], "bytes": len(out),
+                       "error": json.loads(out).get("error")}
         else:
             raw = ""  # ran out of steps without a final answer
+
         names = {c["name"] for c in state["calls"]}
         checked = guard.check(raw, state["retrieved"], state["ledger_used"], state["sources"],
                               memory_only=names == {"remember_fact"})
-        return Result(question=question, answer=checked["answer"], raw_answer=raw, refused=checked["refused"],
-                      reason=checked["reason"] if raw else "no_final_answer", citations=checked["citations"],
-                      retrieved_ids=sorted(state["retrieved"]), tool_calls=state["calls"],
-                      ungrounded_numbers=checked["ungrounded_numbers"], steps=steps,
-                      latency_s=round(time.time() - t0, 2), prompt_tokens=ptok, completion_tokens=ctok)
+        result = Result(question=question, answer=checked["answer"], raw_answer=raw, refused=checked["refused"],
+                        reason=checked["reason"] if raw else "no_final_answer", citations=checked["citations"],
+                        retrieved_ids=sorted(state["retrieved"]), tool_calls=state["calls"],
+                        ungrounded_numbers=checked["ungrounded_numbers"], steps=steps,
+                        latency_s=round(time.time() - t0, 2), prompt_tokens=ptok, completion_tokens=ctok)
+        if stream and raw and raw.strip() != result.answer.strip():
+            # Tokens already went out. The guard replaced them.
+            yield {"type": "replaced", "reason": result.reason, "answer": result.answer}
+        yield {"type": "done", "result": result}
+
+    def ask(self, question: str) -> Result:
+        for ev in self._loop(question):
+            if ev["type"] == "done":
+                return ev["result"]
+        raise RuntimeError("agent loop produced no result")
+
+    def ask_stream(self, question: str):
+        """Same loop, but yields progress and token events as they happen."""
+        return self._loop(question, stream=True)

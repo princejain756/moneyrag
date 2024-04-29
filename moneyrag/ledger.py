@@ -81,11 +81,11 @@ def generate_rows(seed: int = 42, months: tuple[tuple[int, int], ...] = tuple((2
     return rows
 
 
-def build_db(path: str | Path, seed: int = 42) -> sqlite3.Connection:
+def build_db(path: str | Path, seed: int = 42, check_same_thread: bool = True) -> sqlite3.Connection:
     path = Path(path)
     if path.exists():
         path.unlink()
-    conn = sqlite3.connect(path)
+    conn = sqlite3.connect(path, check_same_thread=check_same_thread)
     conn.executescript(SCHEMA)
     conn.executemany(
         "INSERT INTO transactions(date, amount_paise, direction, category, merchant) VALUES (?,?,?,?,?)",
