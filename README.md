@@ -37,7 +37,7 @@ Design choices, and why:
 ```bash
 git clone https://github.com/princejain756/moneyrag && cd moneyrag
 uv venv && uv pip install -e ".[dev]"
-pytest -q                                   # 30 tests, no network, no model download
+pytest -q                                   # 38 tests, no network, no model download
 python -m evals.run_retrieval               # downloads bge-small once (~130 MB)
 export OPENROUTER_API_KEY=...               # or MONEYRAG_BASE_URL + MONEYRAG_API_KEY
 python -m moneyrag.app "How much did I spend on fuel in August 2026?"
@@ -54,6 +54,44 @@ Settings, all optional:
 | `MONEYRAG_API_KEY` | falls back to `OPENROUTER_API_KEY` |
 | `MONEYRAG_RETRIEVAL_MODE` | `hybrid` (or `bm25`, `vector`) |
 | `MONEYRAG_EMBED_MODEL` | `BAAI/bge-small-en-v1.5` |
+
+## Run it as a service
+
+The CLI and the HTTP service share one agent loop. Nothing is duplicated.
+
+```bash
+uv pip install -e ".[server]"
+uvicorn moneyrag.service:app --reload --port 8000
+```
+
+| Route | What it does |
+|---|---|
+| `POST /ask` | `{"question": "..."}` → answer plus citations, guard reason, tool calls, token counts, latency |
+| `POST /ask/stream` | same, as server-sent events: `step`, `tool_call`, `tool_result`, `token`, `replaced`, `done` |
+| `GET /health` | chunk count, doc count, saved-fact count |
+| `GET /facts` / `DELETE /facts/{key}` | inspect or delete what the agent remembered |
+
+Every response carries `x-request-id` (caller-supplied ids are echoed), and each
+request logs one JSON line with method, path, status and duration.
+
+Streaming is deliberately not "stream tokens and hope". The guard runs after the
+model stops, so streamed tokens are provisional: if the guard overrides the
+answer, the client gets a `replaced` event carrying the reason (`uncited`,
+`invalid_citation`) and the refusal that replaced it, then `done`. A client that
+renders only `done` is always correct; one that renders tokens has to handle
+`replaced`.
+
+Docker:
+
+```bash
+export OPENROUTER_API_KEY=...
+docker compose up --build          # http://localhost:8000/docs
+```
+
+The image runs as an unprivileged user, bakes the embedding model in at build
+time so a cold container does not hit the network, keeps the ledger and saved
+facts on a named volume, and has a `HEALTHCHECK` against `/health`. CI builds
+the image and fails if the container does not answer `/health` within 60s.
 
 ## Results (run on 2026-11-19)
 
@@ -113,10 +151,13 @@ Raw per-question outputs, including the model's exact wording, are in `evals/res
 ## Layout
 
 ```
-moneyrag/    chunk.py  bm25.py  retrieve.py  ledger.py  memory.py  guard.py  agent.py  app.py
+moneyrag/    chunk.py  bm25.py  retrieve.py  ledger.py  memory.py  guard.py  agent.py
+             app.py (CLI)  service.py (FastAPI + SSE)
 data/docs/   10 synthetic policy docs (markdown)
 evals/       retrieval_golden.jsonl  agent_golden.jsonl  agent_hard.jsonl  run_*.py  results/
-tests/       30 offline tests (fake embedder, scripted fake LLM client)
+tests/       38 offline tests (fake embedder, scripted fake LLM client)
+Dockerfile   slim image, non-root, model baked in, HEALTHCHECK
+.github/     ci.yml - pytest on 3.10 and 3.12, plus a container /health smoke test
 ```
 
 ## License
