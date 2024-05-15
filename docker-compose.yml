@@ -1,0 +1,16 @@
+services:
+  moneyrag:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      MONEYRAG_MODEL: ${MONEYRAG_MODEL:-deepseek/deepseek-v4.1-flash}
+      MONEYRAG_BASE_URL: ${MONEYRAG_BASE_URL:-https://openrouter.ai/api/v1}
+      MONEYRAG_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY (or point MONEYRAG_BASE_URL at a local server)}
+    volumes:
+      # Embedding cache, ledger and saved facts survive a rebuild.
+      - state:/app/.state
+    restart: unless-stopped
+
+volumes:
+  state:
