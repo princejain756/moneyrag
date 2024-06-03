@@ -1,5 +1,7 @@
 # moneyrag
 
+[![ci](https://github.com/princejain756/moneyrag/actions/workflows/ci.yml/badge.svg)](https://github.com/princejain756/moneyrag/actions/workflows/ci.yml)
+
 A small personal finance assistant that runs locally. It answers questions from two sources: a set of bank policy documents (through hybrid retrieval) and the user's own transactions (through a typed SQL tool). It cites every answer and refuses when it has no source. A set of evals measures how often it gets things right.
 
 All data here is synthetic. "Tunga Bank" is a made-up bank, its policies are invented, and the transaction ledger is generated from a fixed random seed. Nothing in this repo is real bank policy or anyone's real money.
