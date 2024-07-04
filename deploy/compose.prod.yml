@@ -1,0 +1,27 @@
+# Public demo behind host nginx. Usage on the server:
+#   docker compose -f deploy/compose.prod.yml --env-file .env up -d --build
+services:
+  moneyrag:
+    build: ..
+    container_name: moneyrag
+    ports:
+      - "127.0.0.1:8110:8000"   # only nginx on the host can reach it
+    environment:
+      MONEYRAG_PUBLIC: "1"           # per-request memory, /facts routes off
+      MONEYRAG_TRUST_PROXY: "1"      # nginx overwrites X-Forwarded-For
+      MONEYRAG_RATE_PER_MIN: "6"     # per client IP
+      MONEYRAG_DAILY_CAP: "300"      # all clients, resets 00:00 UTC
+      MONEYRAG_MODEL: ${MONEYRAG_MODEL:-deepseek/deepseek-v4.1-flash}
+      MONEYRAG_BASE_URL: ${MONEYRAG_BASE_URL:-https://openrouter.ai/api/v1}
+      MONEYRAG_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY in .env}
+    volumes:
+      - state:/app/.state
+    mem_limit: 1g
+    cpus: 1.5
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  state:
