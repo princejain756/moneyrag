@@ -11,9 +11,10 @@ services:
       MONEYRAG_TRUST_PROXY: "1"      # nginx overwrites X-Forwarded-For
       MONEYRAG_RATE_PER_MIN: "6"     # per client IP
       MONEYRAG_DAILY_CAP: "300"      # all clients, resets 00:00 UTC
+      # Any OpenAI-compatible endpoint: OpenRouter, DeepSeek, a local server.
       MONEYRAG_MODEL: ${MONEYRAG_MODEL:-deepseek/deepseek-v4.1-flash}
       MONEYRAG_BASE_URL: ${MONEYRAG_BASE_URL:-https://openrouter.ai/api/v1}
-      MONEYRAG_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY in .env}
+      MONEYRAG_API_KEY: ${MONEYRAG_API_KEY:?set MONEYRAG_API_KEY in .env}
     volumes:
       - state:/app/.state
     mem_limit: 1g
