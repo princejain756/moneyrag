@@ -33,6 +33,7 @@ Design choices, and why:
 - **The model never writes SQL.** It fills `op`, `category`, `merchant`, `direction` and date fields. Each one is checked against an allowlist, and the query is built with parameters. A bad argument returns an error to the model, which can retry. The eval has a case where the user names a merchant that does not exist ("Zesto Foods"). The model read the error, picked "Zesto" from the valid list, and got the exact total.
 - **Money is stored as integer paise.** Sums are exact. The eval grades transaction answers to the paisa, against totals computed by a separate plain-Python loop over the generated rows, so a bug in the SQL tool cannot mark itself correct.
 - **Citations are checked, not trusted.** The model has to cite chunk ids like `[03_fixed_deposits#premature-withdrawal]`. If it cites a chunk it never retrieved, the answer is blocked.
+- **A blocked answer gets one repair turn.** Most guard failures are the model forgetting a citation, not not knowing the answer, so telling the user "I can't answer that" throws away a correct answer. The agent re-asks once, with the list of ids it actually retrieved this turn, and re-runs the same guard. A repair that fails is discarded and the original refusal stands, so the check is never weakened. This cannot rescue a hallucinated citation that is repeated: the id still fails validation.
 - **Embeddings run locally** with fastembed (ONNX, `BAAI/bge-small-en-v1.5`). No embedding API calls. Vectors are cached in `.state/`.
 - **Any OpenAI-compatible endpoint works** for the chat model: OpenRouter, a hosted provider, or a local Ollama or llama.cpp server.
 
@@ -58,6 +59,7 @@ Settings, all optional:
 | `MONEYRAG_API_KEY` | falls back to `OPENROUTER_API_KEY` |
 | `MONEYRAG_RETRIEVAL_MODE` | `hybrid` (or `bm25`, `vector`) |
 | `MONEYRAG_EMBED_MODEL` | `BAAI/bge-small-en-v1.5` |
+| `MONEYRAG_REPAIR` | `1` (one citation-repair turn after a guard failure; `0` disables) |
 
 ## Run it as a service
 

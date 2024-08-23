@@ -78,6 +78,7 @@ def test_ask_echoes_caller_supplied_request_id(state):
 
 def test_ask_refuses_hallucinated_citation(state):
     app = make(state, [[("search_docs", {"query": "late fee credit card"})],
+                       "Gold loans are 9% [11_gold_loan#rates].",
                        "Gold loans are 9% [11_gold_loan#rates]."])
     body = app.post("/ask", json={"question": "gold loan rate?"}).json()
     assert body["refused"] is True and body["reason"] == "invalid_citation"
@@ -103,8 +104,11 @@ def test_stream_emits_progress_tokens_and_done(state):
 
 def test_stream_reports_replacement_when_guard_overrides(state):
     app = make(state, [[("search_docs", {"query": "late fee credit card"})],
-                       "Trust me, it's fine."])
+                       "Trust me, it's fine.",
+                       "I am sure it is fine."])
     events = sse_events(app.post("/ask/stream", json={"question": "late fee?"}).text)
+    kinds = [e["type"] for e in events]
+    assert "repair" in kinds and "repair_result" in kinds
     replaced = [e for e in events if e["type"] == "replaced"]
     assert replaced and replaced[0]["reason"] == "uncited"
     assert events[-1]["type"] == "done" and events[-1]["refused"] is True
@@ -152,7 +156,7 @@ def test_daily_cap_is_global_and_resets_next_utc_day():
 
 def test_limited_request_gets_429_with_retry_after(state):
     app = TestClient(create_app(state=state, client=ScriptedClient([
-        [("search_docs", {"query": "x"})], "Rs 500 [04_credit_card#late-payment-fee]."]),
+        [("search_docs", {"query": "late fee credit card"})], "Rs 500 [04_credit_card#late-payment-fee]."]),
         limiter=Limiter(per_minute=1)))
     assert app.post("/ask", json={"question": "late fee?"}).status_code == 200
     r = app.post("/ask/stream", json={"question": "again?"})
@@ -161,7 +165,7 @@ def test_limited_request_gets_429_with_retry_after(state):
 
 def test_forwarded_ip_only_trusted_behind_proxy(state):
     lim = Limiter(per_minute=1)
-    script = [[("search_docs", {"query": "x"})], "Rs 500 [04_credit_card#late-payment-fee]."] * 2
+    script = [[("search_docs", {"query": "late fee credit card"})], "Rs 500 [04_credit_card#late-payment-fee]."] * 2
     app = TestClient(create_app(state=state, client=ScriptedClient(script), limiter=lim, trust_proxy=True))
     assert app.post("/ask", json={"question": "a"}, headers={"x-forwarded-for": "1.1.1.1"}).status_code == 200
     assert app.post("/ask", json={"question": "b"}, headers={"x-forwarded-for": "2.2.2.2"}).status_code == 200
