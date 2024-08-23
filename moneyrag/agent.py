@@ -18,6 +18,13 @@ from .memory import Memory
 from .retrieve import Retriever
 
 MAX_STEPS = 6
+REPAIRABLE = {"uncited", "invalid_citation"}
+
+REPAIR = """Your previous answer was rejected by a citation checker: {reason}.
+Rewrite it so every factual sentence ends with a citation to a chunk id you actually
+retrieved this turn, or to [ledger] if you ran a transaction query.
+Valid ids this turn: {valid}.
+If you cannot cite a claim, delete the claim. Do not add any new facts."""
 
 SYSTEM = """You answer questions about the user's money using two sources only:
 1. Tunga Bank policy documents, through the search_docs tool.
@@ -84,8 +91,9 @@ class Result:
 
 class Agent:
     def __init__(self, retriever: Retriever, ledger: sqlite3.Connection, memory: Memory, client=None,
-                 model: str | None = None, today: str = "2026-11-19"):
+                 model: str | None = None, today: str = "2026-11-19", repair: bool | None = None):
         self.retriever, self.ledger, self.memory, self.today = retriever, ledger, memory, today
+        self.repair = (os.environ.get("MONEYRAG_REPAIR", "1") != "0") if repair is None else repair
         self.model = model or os.environ.get("MONEYRAG_MODEL", "deepseek/deepseek-v4.1-flash")
         if client is None:
             from openai import OpenAI
@@ -192,8 +200,36 @@ class Agent:
             raw = ""  # ran out of steps without a final answer
 
         names = {c["name"] for c in state["calls"]}
+        memory_only = names == {"remember_fact"}
         checked = guard.check(raw, state["retrieved"], state["ledger_used"], state["sources"],
-                              memory_only=names == {"remember_fact"})
+                              memory_only=memory_only)
+
+        # A guard failure on citations is usually the model forgetting to cite,
+        # not the model not knowing. Give it one turn to fix the citation before
+        # we throw a correct answer away. A repair that fails to pass the guard
+        # is discarded, so this cannot weaken the check.
+        if self.repair and raw and checked["refused"] and checked["reason"] in REPAIRABLE:
+            yield {"type": "repair", "reason": checked["reason"]}
+            valid = sorted(state["retrieved"]) + (["ledger"] if state["ledger_used"] else [])
+            messages.append({"role": "assistant", "content": raw})
+            messages.append({"role": "user", "content": REPAIR.format(
+                reason=checked["reason"], valid=", ".join(valid) or "(nothing yet)")})
+            final = None
+            for ev in self._call_model(messages, stream):
+                if ev["type"] == "_final":
+                    final = ev
+                else:
+                    yield ev
+            ptok += final["usage"][0]
+            ctok += final["usage"][1]
+            steps += 1
+            retried_raw = final["content"]
+            retried = guard.check(retried_raw, state["retrieved"], state["ledger_used"], state["sources"],
+                                  memory_only=memory_only)
+            yield {"type": "repair_result", "refused": retried["refused"], "reason": retried["reason"]}
+            if not retried["refused"]:
+                raw, checked = retried_raw, retried
+
         result = Result(question=question, answer=checked["answer"], raw_answer=raw, refused=checked["refused"],
                         reason=checked["reason"] if raw else "no_final_answer", citations=checked["citations"],
                         retrieved_ids=sorted(state["retrieved"]), tool_calls=state["calls"],
