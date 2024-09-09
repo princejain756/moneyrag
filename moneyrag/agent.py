@@ -91,9 +91,15 @@ class Result:
 
 class Agent:
     def __init__(self, retriever: Retriever, ledger: sqlite3.Connection, memory: Memory, client=None,
-                 model: str | None = None, today: str = "2026-11-19", repair: bool | None = None):
+                 model: str | None = None, today: str = "2026-11-19", repair: bool | None = None,
+                 stream_tokens: bool | None = None):
         self.retriever, self.ledger, self.memory, self.today = retriever, ledger, memory, today
         self.repair = (os.environ.get("MONEYRAG_REPAIR", "1") != "0") if repair is None else repair
+        # Off by default. Streaming answer tokens means the user sees an unverified
+        # rupee figure that the guard may later retract, which is worse than waiting.
+        # Progress events still stream, so the UI is not silent.
+        self.stream_tokens = (os.environ.get("MONEYRAG_STREAM_TOKENS", "0") == "1") \
+            if stream_tokens is None else stream_tokens
         self.model = model or os.environ.get("MONEYRAG_MODEL", "deepseek/deepseek-v4.1-flash")
         if client is None:
             from openai import OpenAI
@@ -163,6 +169,7 @@ class Agent:
 
     def _loop(self, question: str, stream: bool = False):
         """Run the tool loop. Yields progress events; the last event is `done`."""
+        model_stream = stream and self.stream_tokens
         t0 = time.time()
         sysmsg = SYSTEM.format(refusal=guard.REFUSAL, today=self.today, memory=self.memory.as_prompt())
         messages = [{"role": "system", "content": sysmsg}, {"role": "user", "content": question}]
@@ -172,7 +179,7 @@ class Agent:
         for steps in range(1, MAX_STEPS + 1):
             yield {"type": "step", "n": steps}
             final = None
-            for ev in self._call_model(messages, stream):
+            for ev in self._call_model(messages, model_stream):
                 if ev["type"] == "_final":
                     final = ev
                 else:
@@ -215,7 +222,7 @@ class Agent:
             messages.append({"role": "user", "content": REPAIR.format(
                 reason=checked["reason"], valid=", ".join(valid) or "(nothing yet)")})
             final = None
-            for ev in self._call_model(messages, stream):
+            for ev in self._call_model(messages, model_stream):
                 if ev["type"] == "_final":
                     final = ev
                 else:
@@ -235,7 +242,7 @@ class Agent:
                         retrieved_ids=sorted(state["retrieved"]), tool_calls=state["calls"],
                         ungrounded_numbers=checked["ungrounded_numbers"], steps=steps,
                         latency_s=round(time.time() - t0, 2), prompt_tokens=ptok, completion_tokens=ctok)
-        if stream and raw and raw.strip() != result.answer.strip():
+        if model_stream and raw and raw.strip() != result.answer.strip():
             # Tokens already went out. The guard replaced them.
             yield {"type": "replaced", "reason": result.reason, "answer": result.answer}
         yield {"type": "done", "result": result}

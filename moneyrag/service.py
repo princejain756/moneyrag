@@ -118,7 +118,7 @@ def _env_int(name: str) -> int:
 
 def create_app(state: dict | None = None, client=None, model: str | None = None,
                public: bool | None = None, limiter: Limiter | None = None,
-               trust_proxy: bool | None = None) -> FastAPI:
+               trust_proxy: bool | None = None, stream_tokens: bool | None = None) -> FastAPI:
     public = os.environ.get("MONEYRAG_PUBLIC") == "1" if public is None else public
     trust_proxy = os.environ.get("MONEYRAG_TRUST_PROXY") == "1" if trust_proxy is None else trust_proxy
     limiter = limiter or Limiter(_env_int("MONEYRAG_RATE_PER_MIN"), _env_int("MONEYRAG_DAILY_CAP"))
@@ -141,7 +141,8 @@ def create_app(state: dict | None = None, client=None, model: str | None = None,
     def make_agent() -> Agent:
         c = components()
         memory = Memory(sqlite3.connect(":memory:", check_same_thread=False)) if public else c["memory"]
-        return Agent(c["retriever"], c["ledger"], memory, client=app.state.client, model=app.state.model)
+        return Agent(c["retriever"], c["ledger"], memory, client=app.state.client, model=app.state.model,
+                     stream_tokens=stream_tokens)
 
     def admit(request: Request) -> None:
         ok, reason, retry = limiter.check(_client_ip(request, trust_proxy))
