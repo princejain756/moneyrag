@@ -88,7 +88,8 @@ def test_ask_rejects_empty_question(state):
     assert make(state, []).post("/ask", json={"question": ""}).status_code == 422
 
 
-def test_stream_emits_progress_tokens_and_done(state):
+def test_stream_emits_progress_and_verified_answer_only(state):
+    """Progress streams; the answer text does not, so no unverified figure is ever shown."""
     app = make(state, [[("search_docs", {"query": "late fee credit card"})],
                        "Rs 500 for a 12,000 bill [04_credit_card#late-payment-fee]."])
     r = app.post("/ask/stream", json={"question": "Late fee?"})
@@ -96,22 +97,36 @@ def test_stream_emits_progress_tokens_and_done(state):
     events = sse_events(r.text)
     kinds = [e["type"] for e in events]
     assert kinds[0] == "step"
-    assert "tool_call" in kinds and "tool_result" in kinds and "token" in kinds
+    assert "tool_call" in kinds and "tool_result" in kinds
+    assert "token" not in kinds and "replaced" not in kinds
     assert kinds[-1] == "done"
     assert events[-1]["refused"] is False
-    assert "".join(e["text"] for e in events if e["type"] == "token").startswith("Rs 500")
+    assert events[-1]["answer"].startswith("Rs 500")
 
 
-def test_stream_reports_replacement_when_guard_overrides(state):
+def test_guard_override_is_never_shown_to_the_user(state):
     app = make(state, [[("search_docs", {"query": "late fee credit card"})],
                        "Trust me, it's fine.",
                        "I am sure it is fine."])
     events = sse_events(app.post("/ask/stream", json={"question": "late fee?"}).text)
     kinds = [e["type"] for e in events]
     assert "repair" in kinds and "repair_result" in kinds
-    replaced = [e for e in events if e["type"] == "replaced"]
-    assert replaced and replaced[0]["reason"] == "uncited"
+    # Nothing was shown, so there is nothing to retract, and the bad text never leaks.
+    assert "token" not in kinds and "replaced" not in kinds
+    assert "fine" not in events[-1]["answer"]
     assert events[-1]["type"] == "done" and events[-1]["refused"] is True
+
+
+def test_token_streaming_is_opt_in_and_retracts(state):
+    """With token streaming on, a guarded answer is explicitly retracted."""
+    app = TestClient(create_app(
+        state=state, stream_tokens=True,
+        client=ScriptedClient([[("search_docs", {"query": "late fee credit card"})],
+                               "Trust me, it's fine.", "I am sure it is fine."])))
+    events = sse_events(app.post("/ask/stream", json={"question": "late fee?"}).text)
+    kinds = [e["type"] for e in events]
+    assert "token" in kinds and "replaced" in kinds
+    assert events[-1]["refused"] is True
 
 
 def test_index_serves_demo_page(state):

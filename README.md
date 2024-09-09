@@ -60,6 +60,7 @@ Settings, all optional:
 | `MONEYRAG_RETRIEVAL_MODE` | `hybrid` (or `bm25`, `vector`) |
 | `MONEYRAG_EMBED_MODEL` | `BAAI/bge-small-en-v1.5` |
 | `MONEYRAG_REPAIR` | `1` (one citation-repair turn after a guard failure; `0` disables) |
+| `MONEYRAG_STREAM_TOKENS` | `0` (stream progress only; `1` also streams provisional answer tokens) |
 
 ## Run it as a service
 
@@ -73,19 +74,24 @@ uvicorn moneyrag.service:app --reload --port 8000
 | Route | What it does |
 |---|---|
 | `POST /ask` | `{"question": "..."}` → answer plus citations, guard reason, tool calls, token counts, latency |
-| `POST /ask/stream` | same, as server-sent events: `step`, `tool_call`, `tool_result`, `token`, `replaced`, `done` |
+| `POST /ask/stream` | same, as server-sent events: `step`, `tool_call`, `tool_result`, `repair`, `repair_result`, `done` (plus `token`/`replaced` only with `MONEYRAG_STREAM_TOKENS=1`) |
 | `GET /health` | chunk count, doc count, saved-fact count |
 | `GET /facts` / `DELETE /facts/{key}` | inspect or delete what the agent remembered |
 
 Every response carries `x-request-id` (caller-supplied ids are echoed), and each
 request logs one JSON line with method, path, status and duration.
 
-Streaming is deliberately not "stream tokens and hope". The guard runs after the
-model stops, so streamed tokens are provisional: if the guard overrides the
-answer, the client gets a `replaced` event carrying the reason (`uncited`,
-`invalid_citation`) and the refusal that replaced it, then `done`. A client that
-renders only `done` is always correct; one that renders tokens has to handle
-`replaced`.
+Streaming does not stream the answer text by default, on purpose. The guard runs
+after the model stops, so any token sent earlier is unverified. In a money
+product, showing `Rs 4,000` and then retracting it is worse than making the user
+wait a second: they have already read the number. So `ask_stream` streams the
+*work* (`step`, `tool_call`, `tool_result`, `repair`) and sends the answer once,
+in `done`, already checked. That is the useful part of streaming anyway — the
+user learns what is happening, not what the model is guessing.
+
+`MONEYRAG_STREAM_TOKENS=1` re-enables token streaming for latency-sensitive,
+non-financial use. Then tokens are provisional and a guard override arrives as a
+`replaced` event carrying the reason and the refusal, before `done`.
 
 Docker:
 
