@@ -47,6 +47,17 @@ def numbers(text: str) -> list[float]:
     return [float(m.replace(",", "")) for m in NUM.findall(re.sub(r"\[[^\]]*\]", " ", text))]
 
 
+def subcheck(sub: dict, refused: bool, text: str, citations: list[str]) -> bool:
+    """One acceptable behaviour: refuse, or answer containing/avoiding given strings."""
+    if sub.get("refuse"):
+        return refused
+    if refused:
+        return False
+    return (all(m.lower() in text for m in sub.get("must", []))
+            and all(m.lower() not in text for m in sub.get("must_not", []))
+            and all(x in citations for x in sub.get("need_cites", [])))
+
+
 def grade(item: dict, res, rows) -> dict:
     out = {"type": item["type"], "q": item["q"], "answer": res.answer, "reason": res.reason,
            "citations": res.citations, "ungrounded_numbers": res.ungrounded_numbers,
@@ -60,8 +71,11 @@ def grade(item: dict, res, rows) -> dict:
         if c.get("answered") or "must" in c or "any" in c or "truth" in c or "truth_all" in c:
             ok = ok and not res.refused
         ok = ok and all(m.lower() in text for m in c.get("must", []))
+        ok = ok and all(m.lower() not in text for m in c.get("must_not", []))
         if "any" in c:
             ok = ok and any(m.lower() in text for m in c["any"])
+        if "any_of" in c:
+            ok = ok and any(subcheck(s, res.refused, text, res.citations) for s in c["any_of"])
         ok = ok and all(x in res.citations for x in c.get("need_cites", []))
         nums = numbers(res.answer)
         if "truth" in c:
