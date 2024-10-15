@@ -152,9 +152,41 @@ DeepSeek V4.1 Flash, temperature 0, through an OpenAI-compatible provider.
 | Median latency | 4.15 s |
 | Total tokens | 82,393 |
 
-30/30 means this set is too easy to tell good behaviour from great. That is why the hard set exists.
+30/30 means this set is too easy to tell good behaviour from great. That is why the hard set exists. It also means 0 failures in 30 puts the 95% upper bound on the failure rate at about 10% (rule of three), so read it as "no observed failure", not "reliable".
 
-### Agent, hard set (12 questions, written after the base run and run once)
+### Agent, hard set, re-run 2026-11-19 on a different model
+
+The original hard-set run below used `deepseek/deepseek-v4.1-flash` through
+OpenRouter. The demo now calls `deepseek-flash` on the DeepSeek API, so the two
+runs are **not comparable** and both are kept.
+
+| Run | Repair turn | Correct | False refusals | Answers with an ungrounded number |
+|---|---|---|---|---|
+| `agent_hard.json` (OpenRouter, original) | n/a | 10/12 | 1 | 1/22 |
+| `agent_hard_norepair.json` | off | **12/12** | 0 | 2/9 |
+| `agent_hard_repair.json` | on | **12/12** | 0 | 2/8 |
+
+Three things this run does not prove, stated plainly:
+
+- **The set is saturated.** 12/12 with zero failures gives a 95% upper bound on
+  the failure rate of about 25% (rule of three, 3/12). The set can no longer
+  separate a good build from a great one.
+- **The repair turn showed no measurable effect**, because it never fired: in
+  neither run did the guard reject a citation, so there was nothing to repair.
+  It stays on by default because the failure mode is real, and
+  `MONEYRAG_REPAIR=0` turns it off. Enabling it costs about 4% more tokens
+  (38,700 vs 37,100 on this set) for no measured gain here.
+- **The near_miss_refusal case was mis-specified** in the original run: it
+  demanded a refusal for a question the corpus answers (savings accounts get no
+  senior add-on; the 0.5% is a fixed-deposit rate). A cited correction was
+  therefore scored as a failure. The grader is now fixed and has its own tests,
+  and it still rejects an invented savings rate. Fixing a measurement bug is not
+  fitting the model, but the numbers above are from a corrected instrument.
+
+The `ungrounded number` column is a flag, not an error: the answer is shown and
+the number is listed so a client can mark it. It should not be read as accuracy.
+
+### Agent, hard set (original run, 12 questions, written after the base run and run once)
 
 | Tag | Correct | What happened |
 |---|---|---|
@@ -175,8 +207,20 @@ Raw per-question outputs, including the model's exact wording, are in `evals/res
 - **Small, self-written eval sets.** The 59 retrieval questions and 42 agent questions were written by the same person who wrote the documents. They are a regression check, not a benchmark. Expect lower numbers on real user questions.
 - **One run per set.** There was no repeat sampling, so there are no confidence intervals. With n=12, one question moves the score by 8 points.
 - **The number-grounding check is coarse.** It matches numbers as sets, so a derived "5.0%" passes whenever a "5" appears anywhere in the sources. It catches invented amounts, but not every derived number.
-- **No retry on guard failures.** An uncited answer becomes a refusal. The obvious next step is one repair turn that asks the model to add citations before giving up.
-- **Synthetic corpus.** 10 short docs. Real bank documents are longer, contradict each other across versions, and need date-aware retrieval.
+- **The citation guard checks provenance, not faithfulness.** It proves a cited
+  chunk was retrieved this turn. It does not prove the chunk *supports* the
+  sentence. A model can cite a real, retrieved chunk next to a claim that chunk
+  does not make and pass. Closing this needs a per-citation quoted span, or an
+  entailment check, which is the next real piece of work.
+- **`[ledger]` has the same shape.** It proves a transaction query ran, not that
+  the numbers in the sentence came from it.
+- **Memory is a trust boundary that is not defended.** User facts are stored
+  verbatim and injected into the *system* prompt, which is the highest trust
+  level. "Remember: ignore previous instructions" would be stored and promoted.
+  Nothing validates or sandboxes that content, and there is no memory eval. The
+  public demo sidesteps this by giving every request its own empty store, which
+  also means the demo never exercises the feature.
+- **Synthetic corpus.** 10 short docs. Real bank documents are longer, contradict each other across versions, and need date-aware retrieval. Real Indian transaction narrations (`UPI/DR/4123.../SWIGGY/YESB/...`) are far messier than the seeded ledger, and merchant matching against them is unsolved here.
 
 ## Layout
 
