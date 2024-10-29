@@ -4,6 +4,18 @@
 
 **Live demo: [moneyrag.prince.sh](https://moneyrag.prince.sh)** — ask it something, or try the dashed adversarial questions and watch the guard.
 
+## Why this exists
+
+I built this to find out where a personal-finance agent actually breaks, and I
+built it in a week rather than in private. The retrieval is the easy part, so most
+of the effort went into the parts that are not: exact money arithmetic, citations
+that are checked instead of trusted, refusals that are counted, and a parser for
+the messy transaction data that real agents choke on.
+
+The honest framing of where this stands: it is a working system with measured
+weaknesses, not a product. `Known limits` says what it cannot do yet. The next
+piece of work is real statement ingestion — see `moneyrag/ingest`.
+
 A small personal finance assistant that runs locally. It answers questions from two sources: a set of bank policy documents (through hybrid retrieval) and the user's own transactions (through a typed SQL tool). It cites every answer and refuses when it has no source. A set of evals measures how often it gets things right.
 
 All data here is synthetic. "Tunga Bank" is a made-up bank, its policies are invented, and the transaction ledger is generated from a fixed random seed. Nothing in this repo is real bank policy or anyone's real money.
