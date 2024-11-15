@@ -28,7 +28,9 @@ MERCHANTS = {
     "loan_emi": ["Tunga Personal Loan"],
     "salary": ["Northwind Labs Payroll"],
 }
-CATEGORIES = sorted(MERCHANTS)
+# Imported statements carry categories the seeded ledger never generates.
+IMPORT_CATEGORIES = ("cash", "fees", "income", "insurance", "other", "person", "transfer")
+CATEGORIES = sorted(set(MERCHANTS) | set(IMPORT_CATEGORIES))
 OPS = ("sum", "count", "list", "top_merchants", "monthly_totals")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

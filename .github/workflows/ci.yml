@@ -26,6 +26,8 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest -q
         # The suite is offline: fake embedder, scripted LLM client, no model download.
+      - run: python -m evals.run_ingest
+        # Offline regression gate: parsing, classification and balance reconciliation.
 
   image:
     name: docker build

@@ -135,6 +135,61 @@ URL changes the threat model, so three things change:
   it. Checked against the live URL: six requests with six different forged
   headers, and the seventh is refused.
 
+## Import a real bank statement
+
+`moneyrag/ingest` reads a bank CSV, turns each narration into a typed transaction,
+and refuses to hand you the ledger unless the arithmetic reconciles against the
+statement's own running balance.
+
+```bash
+python -m moneyrag.ingest data/statements/example_a.csv --owner "PRINCE JAIN" --db imported.db --strict
+```
+
+```
+{
+  "transactions": 17, "reconciled": true, "pairs_checked": 16, "mismatches": 0,
+  "order": "ascending", "opening_rs": "41,234.56", "closing_rs": "107,429.56",
+  "unknown_channel_rate": 0.118, "unknown_merchant_rate": 0.0,
+  "self_transfers": 2, "reversals_linked": 1
+}
+```
+
+Why it is built this way:
+
+- **The running balance is the test.** A parser that drops a row or misreads
+  `1,20,500.00` still produces a plausible ledger. The bank's own balance column
+  is the only thing that disagrees, so every consecutive pair is checked
+  (`balance[n] - balance[n-1] == signed(amount)`) and so is
+  `opening + sum(transactions) == closing`. A mismatch fails; `--strict` exits non-zero.
+  Both column orders are handled: some exports run newest-first, and the code works
+  out which from the majority of pairs rather than assuming.
+- **It is a rules engine, not a model call.** Narration grammar is stable and the
+  same string always means the same thing. Rules can be diffed, tested and reasoned
+  about, and the eval reports the unknown rate instead of hiding it. An LLM fallback
+  would only earn its cost for narrations no rule matches.
+- **Rail and meaning are separate fields.** `channel` is how the money moved
+  (`upi`, `neft`, `nach`, `atm`, `card`); salary, interest, charges and refunds are
+  flags on top. A salary credited by NEFT is NEFT *and* salary. Collapsing those into
+  one field is how classifiers start contradicting themselves.
+- **Ambiguity is kept, not resolved.** A UPI leg with no known merchant is a
+  `person`, not a guessed shop. A wallet load is `other`, not a payment to somebody.
+  A refund inherits its original's category only when the two can actually be linked.
+- **Self-transfers and refunds are recognised.** A debit and credit of equal size
+  across accounts is a move between your own accounts, not spending. A refund points
+  at the transaction it undoes, so it is not counted as income.
+
+`evals/run_ingest` grades this offline and runs in CI: reconciliation on the two
+fixtures, plus channel, merchant, category (end-to-end) and self-transfer
+precision/recall on 25 labelled rows.
+
+Two bugs that eval caught, which is why it exists: an EMI mandate filed as `other`
+because `nach` is matched before `emi`, and insurance filed as a loan instalment
+because `"EMI"` is a substring of `"PREMIUM"`. Both are regression-tested.
+
+What it does not do yet: link a refund whose original is in a different statement
+(one row in the fixtures is an unlinked refund, counted in the report), net refunds
+inside the SQL tool, or handle PDF statements and Account Aggregator JSON.
+
 ## Results (run on 2026-11-19)
 
 ### Retrieval
@@ -239,9 +294,12 @@ Raw per-question outputs, including the model's exact wording, are in `evals/res
 ```
 moneyrag/    chunk.py  bm25.py  retrieve.py  ledger.py  memory.py  guard.py  agent.py
              app.py (CLI)  service.py (FastAPI + SSE)
+             ingest/  parse.py  classify.py  reconcile.py  pipeline.py  cli.py
 data/docs/   10 synthetic policy docs (markdown)
-evals/       retrieval_golden.jsonl  agent_golden.jsonl  agent_hard.jsonl  run_*.py  results/
-tests/       44 offline tests (fake embedder, scripted fake LLM client)
+data/statements/  2 synthetic bank CSVs, contrasting column layouts and sort order
+evals/       retrieval_golden.jsonl  agent_golden.jsonl  agent_hard.jsonl
+             ingest_golden.jsonl  run_*.py  results/
+tests/       78 offline tests (fake embedder, scripted fake LLM client)
 deploy/      production compose file and nginx site for the public demo
 Dockerfile   slim image, non-root, model baked in, HEALTHCHECK
 .github/     ci.yml - pytest on 3.10 and 3.12, plus a container /health smoke test
