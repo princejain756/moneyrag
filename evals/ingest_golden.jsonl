@@ -1,0 +1,25 @@
+{"narration": "UPI/DR/412345678901/SWIGGY/YESB/swiggy@ybl/ORDER", "direction": "debit", "channel": "upi", "merchant": "swiggy", "category": "food_delivery", "self_transfer": false, "statement": "a"}
+{"narration": "NEFT CR-ACME PAYROLL-SALARY APR 2026", "direction": "credit", "channel": "neft", "merchant": null, "category": "salary", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/412345678902/BUNDL TECHNOLOGIES/YESB/bundl@ybl/INSTAMART", "direction": "debit", "channel": "upi", "merchant": "swiggy", "category": "food_delivery", "self_transfer": false, "statement": "a"}
+{"narration": "ATM WDL CASH BLR", "direction": "debit", "channel": "atm", "merchant": null, "category": "cash", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/412345678903/RAHUL SHARMA/HDFC/rahul.sharma@okhdfcbank", "direction": "debit", "channel": "upi", "merchant": null, "category": "person", "self_transfer": false, "statement": "a"}
+{"narration": "IMPS/DR/412345678904/SELF/PRINCE JAIN/ACME", "direction": "debit", "channel": "imps", "merchant": null, "category": "transfer", "self_transfer": true, "statement": "a"}
+{"narration": "IMPS/CR/412345678905/SELF/PRINCE JAIN/ACME", "direction": "credit", "channel": "imps", "merchant": null, "category": "transfer", "self_transfer": true, "statement": "a"}
+{"narration": "POS 4567XXXX1234 AMAZON INDIA", "direction": "debit", "channel": "card", "merchant": "amazon", "category": "shopping", "self_transfer": false, "statement": "a"}
+{"narration": "NACH DR-TATA A1 LIFE INSURANCE PREMIUM", "direction": "debit", "channel": "nach", "merchant": "lic", "category": "insurance", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/412345678906/ZOMATO/YESB/zomato@ybl", "direction": "debit", "channel": "upi", "merchant": "zomato", "category": "food_delivery", "self_transfer": false, "statement": "a"}
+{"narration": "SMS CHRG INCL GST APR26", "direction": "debit", "channel": "other", "merchant": null, "category": "fees", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/CR/412345678907/SWIGGY REFUND/YESB/swiggy@ybl", "direction": "credit", "channel": "upi", "merchant": "swiggy", "category": "food_delivery", "self_transfer": false, "statement": "a"}
+{"narration": "INT.PD QTRLY", "direction": "credit", "channel": "other", "merchant": null, "category": "income", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/412345678908/BESCOM/YESB/bescom@ybl", "direction": "debit", "channel": "upi", "merchant": "bescom", "category": "utilities", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/500000000001/BLINKIT/YESB/blinkit@ybl", "direction": "debit", "channel": "upi", "merchant": "blinkit", "category": "groceries", "self_transfer": false, "statement": "b"}
+{"narration": "IMPS/DR/500000000002/RAVI KUMAR/SBIN/ravi@okaxis", "direction": "debit", "channel": "imps", "merchant": null, "category": "person", "self_transfer": false, "statement": "b"}
+{"narration": "POS 4111XXXX5566 DECATHLON", "direction": "debit", "channel": "card", "merchant": "decathlon", "category": "shopping", "self_transfer": false, "statement": "b"}
+{"narration": "NEFT CR-ACME PAYROLL-SALARY MAY 2026", "direction": "credit", "channel": "neft", "merchant": null, "category": "salary", "self_transfer": false, "statement": "b"}
+{"narration": "UPI/DR/500000000003/AIRTEL/BHARTHI/AIRTEL@ybl", "direction": "debit", "channel": "upi", "merchant": "airtel", "category": "utilities", "self_transfer": false, "statement": "b"}
+{"narration": "UPI/DR/500000000004/GROWW/NEXTBILLION/groww@ybl", "direction": "debit", "channel": "upi", "merchant": "groww", "category": "investments", "self_transfer": false, "statement": "b"}
+{"narration": "UPI/CR/500000000005/AMAZON REFUND/YESB/amazon@ybl", "direction": "credit", "channel": "upi", "merchant": "amazon", "category": "other", "self_transfer": false, "statement": "b"}
+{"narration": "CHQ CLG 123456", "direction": "debit", "channel": "cheque", "merchant": null, "category": "other", "self_transfer": false, "statement": "b"}
+{"narration": "NACH/DR/HDFC BANK LTD-ACH/EMI HOME LOAN", "direction": "debit", "channel": "nach", "merchant": null, "category": "loan_emi", "self_transfer": false, "statement": "a"}
+{"narration": "UPI/DR/412345678909/PAYTM/YESB/paytm@ybl", "direction": "debit", "channel": "upi", "merchant": null, "category": "other", "self_transfer": false, "statement": "a"}
+{"narration": "VISA/4567XXXX1234/NETFLIX.COM", "direction": "debit", "channel": "card", "merchant": "netflix", "category": "entertainment", "self_transfer": false, "statement": "a"}
